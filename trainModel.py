@@ -95,27 +95,42 @@ def test(model, testingLoarder):
     print('accuracy = {:f}'.format(correct / total))
     print()
 
-def run(dataDir = 'data', modelName = None):
-    
-    data, dataLoaders = preprocessData(dataDir)
-
-    model = torch.hub.load('pytorch/vision:v0.12.0', 'mobilenet_v2', pretrained=True)
-
-    model.classifier[1] = nn.Sequential(
-        nn.Linear(1280, 256),
-        nn.ReLU(), 
-        nn.Linear(256, 128),
-        nn.ReLU(), 
-        nn.Dropout(0.4), 
-        nn.Linear(128, 64),
-        nn.ReLU(),
-        nn.Linear(64, 32),
-        nn.ReLU(),
-        nn.Dropout(0.4), 
-        nn.Linear(32, 2), 
-        nn.LogSoftmax(dim=1))
-
+def run(modelName = None):
     try:
+        dataDirPrompt = "Choose the data directory for training and testing (skip to use ./data): "
+        while True:
+            try:
+                dataDirIn = input(dataDirPrompt)
+                if dataDirIn == "":
+                    break
+                else:
+                    dataDir = dataDirIn
+                    if not os.path.isdir(os.getcwd()+'/' + dataDir + '/train/') or not os.path.isdir(os.getcwd()+'/' + dataDir + '/test/'):
+                        raise FileNotFoundError
+                    break
+            except FileNotFoundError:
+                dataDirPrompt = 'Fail to find specified directory or it does not have desired structure! \nPlease try again (or skip to use ./data): '
+                dataDir = 'data'
+
+
+        data, dataLoaders = preprocessData(dataDir)
+
+        model = torch.hub.load('pytorch/vision:v0.12.0', 'mobilenet_v2', pretrained=True)
+
+        model.classifier[1] = nn.Sequential(
+            nn.Linear(1280, 256),
+            nn.ReLU(), 
+            nn.Linear(256, 128),
+            nn.ReLU(), 
+            nn.Dropout(0.4), 
+            nn.Linear(128, 64),
+            nn.ReLU(),
+            nn.Linear(64, 32),
+            nn.ReLU(),
+            nn.Dropout(0.4), 
+            nn.Linear(32, 2), 
+            nn.LogSoftmax(dim=1))
+
         epochsPrompt = "Enter the Number of Epochs (skip to use the recommended Epochs {}): "
         lrPrompt = "Select in [0 - 100] as the Learning Rate (skip to use the default learning rate 75): "
         while True:
