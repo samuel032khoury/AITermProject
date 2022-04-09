@@ -102,6 +102,7 @@ def run(modelName = None):
             try:
                 dataDirIn = input(dataDirPrompt)
                 if dataDirIn == "":
+                    dataDir = 'data'
                     break
                 else:
                     dataDir = dataDirIn
