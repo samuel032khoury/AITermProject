@@ -47,26 +47,30 @@ def run(modelName=None):
     faceDetectFile = os.getcwd() + '/model_data/faceDetect.caffemodel'
     faceDetectModel = cv2.dnn.readNetFromCaffe(prototxtFile, faceDetectFile)
 
+    cap = cv2.VideoCapture(0)
+
     modelNamePrompt = 'Enter the file name of the model want to use: '
 
-    while True:
-        if modelName == None:
-            modelName = input(modelNamePrompt)
-            maskDetectFile = os.getcwd() + '/model_data/' + modelName
-        try:
-            maskDetectModel = torch.load(maskDetectFile)
-            break
-        except (FileNotFoundError, IsADirectoryError):
-            modelName = None
-            modelNamePrompt = 'Fail to find the model! Please check the model name and enter agian: '
-
-    print('Loading Model...')
-    maskDetectModel.eval()
-
-    cap = cv2.VideoCapture(0)
     try:
         while True:
-            _, frame = cap.read()
+            if modelName == None:
+                modelName = input(modelNamePrompt)
+                maskDetectFile = os.getcwd() + '/model_data/' + modelName
+            try:
+                maskDetectModel = torch.load(maskDetectFile)
+                break
+            except (FileNotFoundError, IsADirectoryError):
+                modelName = None
+                modelNamePrompt = 'Fail to find the model! Please check the model name and enter agian: '
+
+        print('Loading Model...')
+        maskDetectModel.eval()
+
+        while True:
+            on, frame = cap.read()
+            if not on:
+                print('No camera is available!')
+                raise ValueError
             (faces,postions) = detectFace(faceDetectModel, frame)
             predictions=detectMask(maskDetectModel, faces)
             
@@ -78,11 +82,10 @@ def run(modelName=None):
                 cv2.rectangle(frame,(startX, startY),(endX, endY),color,2)
             cv2.imshow('Detecting...',frame)
             cv2.waitKey(1)
-    except KeyboardInterrupt:
+    except (KeyboardInterrupt, ValueError):
         cap.release()
         cv2.destroyAllWindows()
-        print()
-        print('Program terminated!')
+        print('\nProgram terminated!')
 
 if __name__ == '__main__':
     run()

@@ -78,8 +78,7 @@ def train(epochs, model, trainingData, trainingLoader):
                 else:
                     pbar.update(60)
 
-        print('ACCURACY FOR EPOCH {} : {:.4f}'.format((epoch + 1), truePos / totalTrail))
-        print()
+        print('ACCURACY FOR EPOCH {} : {:.4f}\n'.format((epoch + 1), truePos / totalTrail))
 
 def test(model, testingLoarder):
     correct = 0
@@ -92,8 +91,7 @@ def test(model, testingLoarder):
             total += labels.size(0)
     print('Testing Report:')
     print('correct: {:d}  total: {:d}'.format(correct, total))
-    print('accuracy = {:f}'.format(correct / total))
-    print()
+    print('accuracy = {:f}\n'.format(correct / total))
 
 def run(modelName = None):
     try:
@@ -158,8 +156,7 @@ def run(modelName = None):
         torch.save(model, "./model_data/"+modelName+".pth")
         return data['train'].classes
     except KeyboardInterrupt:
-        print()
-        print("Exiting...")
+        print("\nExiting...", sep="")
 
 if __name__ == '__main__':
     run()
