@@ -38,6 +38,7 @@ def train(epochs, model, trainingData, trainingLoader):
     
     from tqdm import tqdm
     cel = torch.nn.CrossEntropyLoss()
+    optimizer = torch.optim.Adam(model.parameters(), lr=0.001)
     trainingSize = len(trainingData)
     loaderSize = len(trainingLoader)
 
@@ -47,10 +48,9 @@ def train(epochs, model, trainingData, trainingLoader):
         model.train()
 
         with tqdm(total = trainingSize, unit = 'imgs') as pbar:
-            for ind, (img, label) in enumerate(trainingLoader):
-                optimizer = torch.optim.Adam(model.parameters(), lr=0.001)
+            for ind, (imgs, label) in enumerate(trainingLoader):
                 optimizer.zero_grad()
-                output = model(img)
+                output = model(imgs)
                 cel(output, label).backward()
                 optimizer.step()
 
@@ -66,8 +66,8 @@ def train(epochs, model, trainingData, trainingLoader):
         totalTrail = 0
 
         with tqdm(total = trainingSize, unit = 'imgs') as pbar:
-            for ind, (img, label) in enumerate(trainingLoader):
-                output = model(img)
+            for ind, (imgs, label) in enumerate(trainingLoader):
+                output = model(imgs)
                 cel(output,label) 
                 correct = torch.eq(torch.max(nn.functional.softmax(output, dim=1), dim=1)[1], label).view(-1)
                 truePos += torch.sum(correct).item()
@@ -84,8 +84,8 @@ def test(model, testingLoarder):
     correct = 0
     total = 0
     with torch.no_grad():
-        for img, labels in testingLoarder:
-            outputs = model(img)
+        for imgs, labels in testingLoarder:
+            outputs = model(imgs)
             _, predicted = torch.max(outputs.data, 1)
             correct += (predicted == labels).sum().item()
             total += labels.size(0)
