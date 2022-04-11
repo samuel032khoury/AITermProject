@@ -90,8 +90,7 @@ def test(model, testingLoarder):
             correct += (predicted == labels).sum().item()
             total += labels.size(0)
     print('Testing Report:')
-    print('correct: {:d}  total: {:d}'.format(correct, total))
-    print('accuracy = {:f}\n'.format(correct / total))
+    print('The accuracy of the trained model is {:.2f}% ({:d}/{:d})'.format(correct / total * 100, correct, total))
 
 def run(modelName = None):
     try:
