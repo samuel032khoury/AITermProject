@@ -1,3 +1,5 @@
+# Neural Networks Intro
+
 ## Overview
 
 - Structured Data Vs. Unstructured Data
@@ -91,15 +93,62 @@ Multiple instances:Multiple features:Multiple Nodes:Multiple layers -> Compute $
   - $\delta W^{[1]}=\delta z^{[1]} x^{T}$
   - $\delta b^{[1]}=\delta z^{[1]}$
 - If the same network but has multiple training instances
-  - 
+  - $\delta Z^{[2]} = A^{[2]} - Y$
+  - $\delta W^{[2]} = \frac 1m \delta Z^{[2]} \cdot A^{[1]T}$
+  - $\delta B^{[2]} = \frac 1m np.sum( \delta z^{[2]}, axis = 1, keepdims = True)$
+  - $\delta Z^{[1]}=W^{[2] T} \delta Z^{[2]} \cdot g^{[1] \prime}\left(Z^{[1]}\right)$
+  - $\delta W^{[1]}= \frac 1m  \delta Z^{[1]} X^{T}$
+  - $\delta B^{[1]}=np.sum(\delta Z^{[1]}, axis = 1, kepdims = True)$
 - In neural network, a variable and its backward derivative have the same dimension
+
+### Learning
+
+Repeat derivative update untill converge:
+
+- $w^{[\ell]} \gets w^{[\ell]} - \alpha \cdot \delta w^{[\ell]}$
+- $b^{[\ell]} \gets b^{[\ell]} - \alpha \cdot \delta b^{[\ell]}$
 
 ### Random Initialization
 
-- Weights need to be randomly initialized to mitigate symmetry breaking.
-- $b$ can be initialzied as 0's
+- Weights $w$ need to be randomly initialized to mitigate symmetry breaking.
+- Bias $b$ can be initialzied as $0$'s
+
+## Deep Neural Network Notation
+
+- Use $L$ to denote the layers in the network;
+- Use $n^{[\ell]}$ to denote the number of units in layer $\ell$;
+- Use $a^{[\ell]}$ to denote the activation function in layer $l$, $a^{[\ell]} = g^{[\ell]}(z^{[\ell]}) = g^{[\ell]}(w^{[\ell]} a^{[\ell - 1]} + b^{[\ell]})$
+
+## Hyperparameters & Parameters
+
+- Parameters
+  - $W^{[1]}, b^{[1]}, W^{[2]}, b^{[2]},...$
+- Hyperparameters
+  - Learning rate $\alpha$
+  - \#iterations
+  - \#hidden layers
+  - \#hidden units
+  - Choice of activation function
 
 ---
+
+# Hyperparameter Tuning, Regularization, Optimization
+
+## Train/Dev/Test Sets
+
+- Learning algorithm like gradient descent use **training data** iteratively to learn the parameters of the model.
+- The goal of **dev-set** is to rank the models in term of their accuracy and helps us decide which model to proceed further with.
+-  We use **test-set** as a proxy for unseen data and evaluate our model on test-set.
+
+## Bias/Variance
+
+High variance -> Overfitting
+
+High Bias -> Underfitting
+
+---
+
+# Optimize Architecture
 
 ## Orthogonalization
 

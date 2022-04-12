@@ -29,70 +29,49 @@ def preprocessData(dataDir):
 
     dataLoaders = {
         'train': DataLoader(data['train'], batch_size = 60, shuffle=True),
-        'test': DataLoader(data['test'], batch_size = 60, shuffle=True)
+        'test': DataLoader(data['test'], shuffle=True)
     }
 
     return data, dataLoaders
 
-def train(epochs, model, trainingData, trainingLoader):
+def train(epochs, model, trainingLoader, trainingSize):
     
     from tqdm import tqdm
     cel = torch.nn.CrossEntropyLoss()
-    optimizer = torch.optim.Adam(model.parameters(), lr=0.001)
-    trainingSize = len(trainingData)
+    opt = torch.optim.Adam(model.parameters(), lr=0.001)
     loaderSize = len(trainingLoader)
 
+    print("START TRAINING MODEL")
     for epoch in range(epochs):
 
-        print("EPOCH {} - TRAINING MODEL".format((epoch + 1)))
+        print("TRAINING PROGRESS: {}/{} Epoch".format((epoch + 1), epochs))
         model.train()
 
         with tqdm(total = trainingSize, unit = 'imgs') as pbar:
             for ind, (imgs, label) in enumerate(trainingLoader):
-                optimizer.zero_grad()
+                opt.zero_grad()
                 output = model(imgs)
                 cel(output, label).backward()
-                optimizer.step()
+                opt.step()
 
                 if ind == loaderSize - 1:
                     pbar.update(trainingSize % 60)
                 else:
                     pbar.update(60)
-        
-        print("EPOCH {} - EVALUATING MODEL".format((epoch + 1)))
-        model.eval()
 
-        truePos = 0 
-        totalTrail = 0
-
-        with tqdm(total = trainingSize, unit = 'imgs') as pbar:
-            for ind, (imgs, label) in enumerate(trainingLoader):
-                output = model(imgs)
-                cel(output,label) 
-                correct = torch.eq(torch.max(nn.functional.softmax(output, dim=1), dim=1)[1], label).view(-1)
-                truePos += torch.sum(correct).item()
-                totalTrail += correct.shape[0]
-                
-                if ind == loaderSize - 1:
-                    pbar.update(trainingSize % 60)
-                else:
-                    pbar.update(60)
-
-        print('ACCURACY FOR EPOCH {} : {:.4f}\n'.format((epoch + 1), truePos / totalTrail))
-
-def test(model, testingLoarder):
+def test(model, testingLoarder, testingSize):
+    from tqdm import tqdm
+    print("\nSTART TESTING MODEL")
+    model.eval()
     correct = 0
-    total = 0
-    with torch.no_grad():
-        for imgs, labels in testingLoarder:
-            outputs = model(imgs)
-            _, predicted = torch.max(outputs.data, 1)
-            correct += (predicted == labels).sum().item()
-            total += labels.size(0)
+    for imgs, labels in tqdm(testingLoarder, unit = 'imgs'):
+        outputs = model(imgs)
+        correct = correct + 1 if torch.argmax(outputs.data).item() == labels else correct
     print('Testing Report:')
-    print('The accuracy of the trained model is {:.2f}% ({:d}/{:d})'.format(correct / total * 100, correct, total))
+    print('The accuracy of the trained model is {:.2f}% ({:d}/{:d})'.format(correct / testingSize * 100, correct, testingSize))
 
 def run(modelName = None):
+    import math
     try:
         dataDirPrompt = "Choose the data directory for training and testing (skip to use ./data): "
         while True:
@@ -115,41 +94,28 @@ def run(modelName = None):
 
         model = torch.hub.load('pytorch/vision:v0.12.0', 'mobilenet_v2', pretrained=True)
 
+        for param in model.parameters():
+            param.requires_grad = False
+
         model.classifier[1] = nn.Sequential(
-            nn.Linear(1280, 256),
-            nn.ReLU(), 
-            nn.Linear(256, 128),
-            nn.ReLU(), 
-            nn.Dropout(0.4), 
-            nn.Linear(128, 64),
-            nn.ReLU(),
-            nn.Linear(64, 32),
-            nn.ReLU(),
-            nn.Dropout(0.4), 
-            nn.Linear(32, 2), 
-            nn.LogSoftmax(dim=1))
+            nn.Linear(1280, 256), nn.ReLU(), 
+            nn.Linear(256, 128), nn.ReLU(), nn.Dropout(0.4), 
+            nn.Linear(128, 64), nn.ReLU(),
+            nn.Linear(64, 32), nn.ReLU(), nn.Dropout(0.4), 
+            nn.Linear(32, 2), nn.LogSoftmax(dim=1))
 
         epochsPrompt = "Enter the Number of Epochs (skip to use the recommended Epochs {}): "
-        lrPrompt = "Select in [0 - 100] as the Learning Rate (skip to use the default learning rate 75): "
         while True:
             try:
-                import math
                 recommended = math.ceil(2000 / len(data['train']))
                 epochsIn = input(epochsPrompt.format(recommended))
                 epochs = recommended if  epochsIn == "" else int(epochsIn)
                 break
             except ValueError:
                 epochsPrompt = "Integer required, please try again (skip to use the recommended Epochs {}): "
-        while True:
-            try:
-                lrIn = input(lrPrompt)
-                lr = 75 if  lrIn == "" else int(lrIn)
-                break
-            except ValueError:
-                lrPrompt = "Integer required, please try again (skip to use the default learning rate 75):"
         
-        train(epochs, model, data['train'], dataLoaders['train'])
-        test(model, dataLoaders['test'])
+        train(epochs, model, dataLoaders['train'], len(data['train']))
+        test(model, dataLoaders['test'], len(data['test']))
 
         modelName = input("Enter the name for the model: ") if modelName == None else modelName
         torch.save(model, "./model_data/"+modelName+".pth")
