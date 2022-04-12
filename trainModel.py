@@ -70,7 +70,7 @@ def test(model, testingLoarder, testingSize):
     print('Testing Report:')
     print('The accuracy of the trained model is {:.2f}% ({:d}/{:d})'.format(correct / testingSize * 100, correct, testingSize))
 
-def run(modelName = None):
+def run(modelName = ''):
     import math
     try:
         dataDirPrompt = "Choose the data directory for training and testing (skip to use ./data): "
@@ -117,8 +117,23 @@ def run(modelName = None):
         train(epochs, model, dataLoaders['train'], len(data['train']))
         test(model, dataLoaders['test'], len(data['test']))
 
-        modelName = input("Enter the name for the model: ") if modelName == None else modelName
+        ab = 'abcdefghijklmnopqrstuvwxyz'
+        strFilter= ab + ab.upper() +'1234567890'
+        nameModelPrompt = "Enter the name for the model: "
+        while True:
+            modelName = input(nameModelPrompt) if not modelName else modelName
+            modelName = modelName[:-4] if modelName.endswith('.pth') else modelName
+            if all(c in strFilter for c in modelName):
+                if modelName:
+                    break
+                else:
+                    nameModelPrompt = "Model Name cannot be empty: "
+            else:
+                modelName = ''
+                nameModelPrompt = "Invalid name for the model, use letters and numbers only: "
+
         torch.save(model, "./model_data/"+modelName+".pth")
+        print('Model saved as {}.pth in ./model_data/'.format(modelName))
         return data['train'].classes
     except KeyboardInterrupt:
         print("\nExiting...", sep="")
