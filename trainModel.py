@@ -1,6 +1,7 @@
 import os
 import torch
 import torch.nn as nn
+from tqdm import tqdm
 
 def preprocessData(dataDir):
     from torchvision import transforms
@@ -35,8 +36,6 @@ def preprocessData(dataDir):
     return data, dataLoaders
 
 def train(epochs, model, trainingLoader, trainingSize):
-    
-    from tqdm import tqdm
     cel = torch.nn.CrossEntropyLoss()
     opt = torch.optim.Adam(model.parameters(), lr=0.001)
     loaderSize = len(trainingLoader)
@@ -60,13 +59,13 @@ def train(epochs, model, trainingLoader, trainingSize):
                     pbar.update(60)
 
 def test(model, testingLoarder, testingSize):
-    from tqdm import tqdm
     print("\nSTART TESTING MODEL")
     model.eval()
     correct = 0
     for imgs, labels in tqdm(testingLoarder, unit = 'imgs'):
         outputs = model(imgs)
-        correct = correct + 1 if torch.argmax(outputs.data).item() == labels else correct
+        if torch.argmax(outputs.data).item() == labels:
+            correct += 1
     print('Testing Report:')
     print('The accuracy of the trained model is {:.2f}% ({:d}/{:d})'.format(correct / testingSize * 100, correct, testingSize))
 
@@ -75,20 +74,15 @@ def run(modelName = ''):
     try:
         dataDirPrompt = "Choose the data directory for training and testing (skip to use ./data): "
         while True:
-            try:
-                dataDirIn = input(dataDirPrompt)
-                if dataDirIn == "":
-                    dataDir = 'data'
-                    break
-                else:
-                    dataDir = dataDirIn
-                    if not os.path.isdir(os.getcwd()+'/' + dataDir + '/train/') or not os.path.isdir(os.getcwd()+'/' + dataDir + '/test/'):
-                        raise FileNotFoundError
-                    break
-            except FileNotFoundError:
-                dataDirPrompt = 'Fail to find specified directory or it does not have desired structure! \nPlease try again (or skip to use ./data): '
+            dataDir = input(dataDirPrompt)
+            if dataDir == "":
                 dataDir = 'data'
-
+                break
+            else:
+                if not os.path.isdir(os.getcwd()+'/' + dataDir + '/train/') or not os.path.isdir(os.getcwd()+'/' + dataDir + '/test/'):
+                    dataDirPrompt = 'Fail to find specified directory or it does not have desired structure!\nPlease try again (or skip to use ./data): '
+                else:
+                    break
 
         data, dataLoaders = preprocessData(dataDir)
 
@@ -107,13 +101,14 @@ def run(modelName = ''):
         epochsPrompt = "Enter the Number of Epochs (skip to use the recommended Epochs {}): "
         while True:
             try:
-                recommended = math.ceil(2000 / len(data['train']))
+                recommended = math.ceil(4000 / len(data['train']))
                 epochsIn = input(epochsPrompt.format(recommended))
                 epochs = recommended if  epochsIn == "" else int(epochsIn)
                 break
             except ValueError:
                 epochsPrompt = "Integer required, please try again (skip to use the recommended Epochs {}): "
         
+        model.lableValMap = data['train'].classes
         train(epochs, model, dataLoaders['train'], len(data['train']))
         test(model, dataLoaders['test'], len(data['test']))
 
@@ -134,7 +129,6 @@ def run(modelName = ''):
 
         torch.save(model, "./model_data/"+modelName+".pth")
         print('Model saved as {}.pth in ./model_data/'.format(modelName))
-        return data['train'].classes
     except KeyboardInterrupt:
         print("\nExiting...", sep="")
 
