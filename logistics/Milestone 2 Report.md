@@ -18,7 +18,7 @@ The program uses a pre-trained convolution neural network model, *mobilenet_v2*[
 
 The testing reports it generates a model has an ~97% prediction accuracy after training 10 Epochs using 300 training instances or 1 Epoch using 2200 training instances.
 
-The program also has a descent user interface and relatively easy/intuitive to use.;
+The program also has a decent user interface and relatively easy/intuitive to use.;
 
 
 

@@ -1,4 +1,3 @@
-import os
 import torch
 import torch.nn as nn
 from tqdm import tqdm
@@ -24,8 +23,8 @@ def preprocessData(dataDir):
     }
 
     data = {
-        'train': ImageFolder(root=os.getcwd()+'/' + dataDir + '/train', transform=transRules['train']),
-        'test': ImageFolder(root=os.getcwd()+'/' + dataDir + '/test', transform=transRules['test'])
+        'train': ImageFolder(root='./' + dataDir + '/train', transform=transRules['train']),
+        'test': ImageFolder(root='./' + dataDir + '/test', transform=transRules['test'])
     }
 
     dataLoaders = {
@@ -70,6 +69,7 @@ def test(model, testingLoarder, testingSize):
     print('The accuracy of the trained model is {:.2f}% ({:d}/{:d})'.format(correct / testingSize * 100, correct, testingSize))
 
 def run(modelName = ''):
+    import os
     import math
     try:
         dataDirPrompt = "Choose the data directory for training and testing (skip to use ./data): "
@@ -127,8 +127,8 @@ def run(modelName = ''):
                 modelName = ''
                 nameModelPrompt = "Invalid name for the model, use letters and numbers only: "
 
-        torch.save(model, "./model_data/"+modelName+".pth")
-        print('Model saved as {}.pth in ./model_data/'.format(modelName))
+        torch.save(model, "./models/"+modelName+".pth")
+        print('Model saved as {}.pth in ./models/'.format(modelName))
     except KeyboardInterrupt:
         print("\nExiting...", sep="")
 
