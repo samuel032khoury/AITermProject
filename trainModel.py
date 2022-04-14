@@ -96,7 +96,7 @@ def run(modelName = ''):
             nn.Linear(256, 128), nn.ReLU(), nn.Dropout(0.4), 
             nn.Linear(128, 64), nn.ReLU(),
             nn.Linear(64, 32), nn.ReLU(), nn.Dropout(0.4), 
-            nn.Linear(32, 2), nn.LogSoftmax(dim=1))
+            nn.Linear(32, len(data['train'].classes)), nn.LogSoftmax(dim=1))
 
         epochsPrompt = "Enter the Number of Epochs (skip to use the recommended Epochs {}): "
         while True:
