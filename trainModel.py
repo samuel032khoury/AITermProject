@@ -128,10 +128,16 @@ def run(modelName = ''):
                 nameModelPrompt = "Invalid name for the model, use letters and numbers only: "
 
         torch.save(model, "./models/"+modelName+".pth")
-        print('Model saved as {}.pth in ./models/'.format(modelName))
+        print('==== Model successively saved as ./models/{}.pth ===='.format(modelName))
+        runModelNow = (input('Run the model now (y/n)? ') == 'y')
+        return runModelNow, modelName
     except KeyboardInterrupt:
         print("\nExiting...", sep="")
+        return False, None
 
 if __name__ == '__main__':
-    run()
+    import runModel
+    runModelNow, modelName = run()
+    if runModelNow:
+        runModel.run(modelName)
     
