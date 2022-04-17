@@ -14,16 +14,15 @@ def predict(maskDetectModel, frame):
     faceDetectModel.setInput(blob)
     
     detections = faceDetectModel.forward()
+    print(detections.shape)
     
     taskList = []
     h, w = frame.shape[:2]
     for i in range(0, detections.shape[2]):
-        box = detections[0, 0, i, 3:7] * numpy.array([w, h, w, h])
-        (startX, startY, endX, endY) = box.astype("int")
-        (startX,startY)=(max(0,startX-15),max(0,startY-15))
-        (endX,endY)=(min(w-1,endX+15),min(h-1,endY+15))
         confidence = detections[0, 0, i, 2]
-        if (confidence > 0.6):
+        if (confidence > 0.5):
+            box = detections[0, 0, i, 3:] * numpy.array([w, h, w, h])
+            startX, startY, endX, endY = box.astype("int")
             face = frame[startY:endY, startX:endX]
             poistion = (startX,startY,endX,endY)
             taskList.append((face, poistion))

@@ -56,6 +56,8 @@ Single instance:Multiple features:Multiple Nodes:Multiple layers -> Compute $z^{
 
 Multiple instances:Multiple features:Multiple Nodes:Multiple layers -> Compute $Z^{[k]} = W^{[k]} X^{[k]}+B^{[k]}$ and $A^{[k]} = g^{[k]}(Z^{[k]})$
 
+> In general, the number of neurons in the previous layer gives us the number of columns of the weight matrix, and the number of neurons in the current layer gives us the number of rows in the weight matrix.
+
 #### Activation Function
 
 - TanH
@@ -146,6 +148,19 @@ High variance -> Overfitting
 
 High Bias -> Underfitting
 
+## Regularization (Prevent Overfitting)
+
+- $\underset{w,b}{\arg \min} \ J(w,b)$, where $J(w,b) = \frac1 m\sum^m_{i=1}L(\hat y^{(i)}, y^{(i)}), w \in \R^{n_x}, b \in \R$
+- The $L2$ regularization of $J(w,b)$ is $\frac1 m\sum^m_{i=1}L(\hat y^{(i)}, y^{(i)})+ \frac\lambda{2m}||w||^2_2$, where $\lambda$ is the regularization parameter, and $||w||^2_2 = \sum^{n_x}_{j=1}w)j^2 = w^Tw$.
+
+The Frobenuis norm of $J(w^{[1]}, b^{[1]},...,w^{[\ell]},b^{[\ell]})$ is $\frac1 m\sum^m_{i=1}L(\hat y^{(i)}, y^{(i)})+ \frac\lambda{2m}\sum^l_{l=1}||w^{[l]}||^2_F$, where $||w^{[l]}||^2_F = \sum^{n^{[l]}}_{i=1}\sum^{n^{[l-1]}}_{j=1}(w^{[l]}_{i,j})^2$
+
+## Mini-Batch Gradient Descent
+
+- Set the batch size:
+  - Stochestic gradient descent: b_s = 1 [non-convergent, no vectorization]
+  - Batch gradient descent: b_s = m [Too long per iteration]
+
 ---
 
 # Optimize Architecture
@@ -164,3 +179,21 @@ Separate variables to represent different features.
   - IFNOT: Get a bigger dev set.
 - Performs well in real world
   - IFNOT: Change the dev set or the cost function.
+
+---
+
+# CNN
+
+- Given an $n \times n$ image, $f\times f$ filter, padding $p$ and stride $s$, we have the shape of resulting convolutional matrix as $\left[\frac{n+2 p-f}{s}+1\right\rfloor \times \quad\left[\frac{n+2 p-f}{s}+1\right\rfloor$
+
+- Convolutions over volume $n \times n \times c$, with a $f\times f\times c$ filter, will result a flattened image (sum of element-wise production).
+- One layer of CNN can contain multiple kernels, each of which results a flattened output. All the result from the current layer will be stacked up for the next layer.
+
+## Notation For Multiple-Layer CNN
+
+- Input: $n^{[l-1]}_{H}\times n^{[l-1]}_{W}\times n^{[l-1]}_{C}$
+- $f^{[l]}$ is the size of the kernel applied on input;
+- $p^{[l]}$ is the extra padding adding to the input;
+- $s^{[l]}$ is the increment stride for convolutioning the input;
+- $n^{[l]}_C$ is the number of kernels, each of which has shape of $f^{[l]}\times f^{[l]} \times n_C^{[l-1]}$;
+- $a^{[l]}$ is the output activation (without bias) which has shape of $n^{[l]}_{H}\times n^{[l]}_{W}\times n^{[l]}_{C}$
