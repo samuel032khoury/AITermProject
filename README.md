@@ -3,6 +3,7 @@
 <h5 align="center">
 Deep Learning - Face Mask Detection
 </h5>
+
 ## :gear: Installation
 
 1. Clone the repository
