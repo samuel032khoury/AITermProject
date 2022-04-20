@@ -44,15 +44,31 @@ Notice labels don't have to be binary, but they have to match across the trainin
 
 ## :joystick: Usage
 
+### Model Training
+
 ```bash
 $ python3 trainModel.py
 ```
 
-![running Demo](./res/runDemo.gif)
+![training demo](./res/trainDemo.gif)
 
-- Expected input:
-  1. Data folder
-  2. Training Epochs
+- CLI inputs:
+  1. Data location (default = `./data`)
+  2. Epochs for training (default value depends on the data size)
+  3. Name for the trained model
+
+### Model Running
+
+```bash
+$ python3 runModel.py
+```
+
+- CLI inputs:
+  1. Name of the model to use
+
+#### Model Running Demo (Use the model trained by `./data_big`)
+
+![running demo](./res/runDemo.gif)
 
 ## :building_construction: Architecture
 

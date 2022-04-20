@@ -14,7 +14,6 @@ def predict(maskDetectModel, frame):
     faceDetectModel.setInput(blob)
     
     detections = faceDetectModel.forward()
-    print(detections.shape)
     
     taskList = []
     h, w = frame.shape[:2]
@@ -78,4 +77,4 @@ def run(modelName=None):
         print('\nProgram terminated!')
 
 if __name__ == '__main__':
-    run('big')
+    run()
