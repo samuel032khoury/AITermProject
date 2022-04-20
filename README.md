@@ -49,6 +49,13 @@ Notice labels don't have to be binary, but they have to match across the trainin
 
 The project used *MobileNetv2* pre-trained model for transfer learning (all parameters were freezed). The produced tensor then is taken as the input to train the (modified) classifier of the model in order to make predictions.
 
+### Architecture Overview
+
+![Architecture Overview](res/overview.png)
+
+### Classifier Structure
+![Classifier Structure](res/classifier.png)
+
 ## :microscope: Results & Analysis
 
 
