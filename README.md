@@ -1,8 +1,10 @@
-# AI Term Project
-
+<h1 align="center">
+Face Mask Detection
+</h1>
 <h5 align="center">
-Deep Learning - Face Mask Detection
+A Deep Learning Project Using PyTorch
 </h5>
+
 
 ## :gear: Installation
 
@@ -83,15 +85,22 @@ The project used *MobileNetv2* pre-trained model for transfer learning (all para
 
 ## :microscope: Results & Analysis
 
-
+- The model trained with `./data` after 14 Epochs have an accuracy of 88.16% (67/76).
+- The model trained with `./data_big` after 2 Epochs have an accuracy of 94.07% (1349/1434).
+- Both model work well in practice in a well-lit environment.
 
 ## :warning: Limitations
 
 - Performance under a low-light environment is suboptimal.
+- The model cannot really distinguish between masks (any types) and other objects that can be used to cover face (plain paper, scarf, or even hands). One possible reason is the data labeled by 'no_mask' only contains bare face and ignore samples that faces being covered by ineligible masks. However, as we don't have access to a big enough data set that contains such samples at the time, our claim can't be confirmed.
+
+## :next_track_button: Next Step
+
+- Currently the project only train and use a model learned from binarily-labeled data, we want to try if the accuracy will stay the same level if we apply the algorithm on a multi label data set.
 
 ## :scroll: Reference
 
-1. **[Deep Learning Specialization](https://www.coursera.org/specializations/deep-learning) Offered By [DeepLearning.AI](https://www.deeplearning.ai) on [Coursera](https://www.coursera.org/)**: Structual conceptual knowledge for DL.
+1. **[Deep Learning Specialization](https://www.coursera.org/specializations/deep-learning) Offered By [DeepLearning.AI](https://www.deeplearning.ai) on [Coursera](https://www.coursera.org/)**: Structual knowledge for DL.
 2. **[Extracting faces using OpenCV Face Detection Neural Network](https://towardsdatascience.com/extracting-faces-using-opencv-face-detection-neural-network-475c5cd0c260)**: Inspiration for extracting faces from image
 3. **[Face detection with OpenCV and deep learning](https://medium.com/@vinuvish/face-detection-with-opencv-and-deep-learning-90bff9028fa8)**: Inspiration for `runModel.py`, mostly the OpenCV part.
 4. **[PyTorch Official Github Profile](https://github.com/pytorch)**: Reference for PyTorch relavent issue.
