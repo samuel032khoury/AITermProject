@@ -88,6 +88,7 @@ def run(modelName = ''):
         data, dataLoaders = preprocessData(dataDir)
 
         model = torch.hub.load('pytorch/vision:v0.12.0', 'mobilenet_v2', pretrained=True)
+        print(model)
 
         for p in model.parameters():
             p.requires_grad = False
