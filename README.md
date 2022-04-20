@@ -27,11 +27,11 @@ As this program is performing a supervised learning, it needs labeled data for t
 ├── dataset
 │   ├── train                  # training data
 │       ├── [Label 1]
-│		├── [Label 2]
+│       ├── [Label 2]
 │       └── ...
 │   └── test                   # testing data
 │       ├── [Label 1]
-│		├── [Label 2]
+│       ├── [Label 2]
 └──     └── ...
 ```
 
