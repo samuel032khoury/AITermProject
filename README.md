@@ -44,7 +44,15 @@ Notice labels don't have to be binary, but they have to match across the trainin
 
 ## :joystick: Usage
 
+```bash
+$ python3 trainModel.py
+```
 
+![running Demo](./res/runDemo.gif)
+
+- Expected input:
+  1. Data folder
+  2. Training Epochs
 
 ## :building_construction: Architecture
 
@@ -60,8 +68,6 @@ The project used *MobileNetv2* pre-trained model for transfer learning (all para
 ## :microscope: Results & Analysis
 
 
-
-## 
 
 ## :warning: Limitations
 
