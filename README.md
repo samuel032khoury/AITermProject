@@ -100,11 +100,11 @@ The project used *MobileNetv2* pre-trained model for transfer learning (all para
 
 ## :scroll: Reference
 
-1. **[Deep Learning Specialization](https://www.coursera.org/specializations/deep-learning) Offered By [DeepLearning.AI](https://www.deeplearning.ai) on [Coursera](https://www.coursera.org/)**: Structual knowledge for DL.
+1. **[Deep Learning Specialization](https://www.coursera.org/specializations/deep-learning) Offered By [DeepLearning.AI](https://www.deeplearning.ai) on [Coursera](https://www.coursera.org/)**: Structural knowledge for DL.
 2. **[Extracting faces using OpenCV Face Detection Neural Network](https://towardsdatascience.com/extracting-faces-using-opencv-face-detection-neural-network-475c5cd0c260)**: Inspiration for extracting faces from image
 3. **[Face detection with OpenCV and deep learning](https://medium.com/@vinuvish/face-detection-with-opencv-and-deep-learning-90bff9028fa8)**: Inspiration for `runModel.py`, mostly the OpenCV part.
-4. **[PyTorch Official Github Profile](https://github.com/pytorch)**: Reference for PyTorch relavent issue.
+4. **[PyTorch Official Github Profile](https://github.com/pytorch)**: Reference for PyTorch relevant issue.
 5. **[PyTorch Tutorials](https://github.com/pytorch/tutorials)**: Practical material of syntax and semantics of PyTorch; Help get familiar with functions.
-6. **[PyTorch Vision](https://github.com/pytorch/vision)**: Officia documentation as a reference for transfer learning
-   - **[mobilenetv2](https://pytorch.org/hub/pytorch_vision_mobilenet_v2/)**: The pre-trained model the prjected used
+6. **[PyTorch Vision](https://github.com/pytorch/vision)**: Official documentation as a reference for transfer learning
+   - **[mobilenetv2](https://pytorch.org/hub/pytorch_vision_mobilenet_v2/)**: The pre-trained model the projected used
 7. **[Face-Mask-Detection](https://github.com/chandrikadeb7/Face-Mask-Detection)**: A similar project as a reference, also as our data set source
