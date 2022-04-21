@@ -19,6 +19,9 @@ A Deep Learning Project Using PyTorch
    ```bash
    $ pip3 install -r requirements.txt
    ```
+   
+   - 
+     All the dependencies and required libraries are included in the file `./requirements.txt`. [See here](https://github.com/samuel032khoury/AITermProject/blob/main/requirements.txt)
 
 ## :card_file_box: Data Collection
 
