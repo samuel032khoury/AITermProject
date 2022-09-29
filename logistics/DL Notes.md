@@ -199,4 +199,4 @@ Separate variables to represent different features.
 - $p^{[l]}$ is the extra padding adding to the input;
 - $s^{[l]}$ is the increment stride for convolutioning the input;
 - $n^{[l]}_C$ is the number of kernels, each of which has shape of $f^{[l]}\times f^{[l]} \times n_C^{[l-1]}$;
-- $a^{[l]}$ is the output activation (without bias) which has shape of $n^{[l]}_{H}\times n^{[l]}_{W}\times n^{[l]}_{C}$
+- $a^{[l]}$ is the output activation (without bias) which has shape of ${n}^{[l]}_{H}\times n^{[l]}_{W}\times n^{[l]}_{C}$
